@@ -1,0 +1,565 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Xos17 Mod Launcher Premium</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap">
+<style>
+/* Layout: one phone-width column, liquid-glass cards over a soft aurora, 3-tab glass bar pinned at the bottom. */
+:root {
+  --bg: #eef2fb;
+  --fg: #0f1530;
+  --muted: #55607f;
+  --glass: rgba(255,255,255,.58);
+  --glass-strong: rgba(255,255,255,.9);
+  --line: rgba(15,21,48,.10);
+  --shine: rgba(255,255,255,.9);
+  --shadow: rgba(40,60,120,.16);
+  --blob1: #7dd3fc;
+  --blob2: #a5b4fc;
+  --blob3: #fbcfe8;
+  --btn1: #2563eb;
+  --btn2: #6d5dfc;
+  --accent: #2563eb;
+  --ok: #0f9d6b;
+  --warn: #c2410c;
+  --font-display: "Sora", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #090d18;
+    --fg: #edf0fa;
+    --muted: #9aa4c2;
+    --glass: rgba(255,255,255,.07);
+    --glass-strong: rgba(255,255,255,.14);
+    --line: rgba(255,255,255,.13);
+    --shine: rgba(255,255,255,.22);
+    --shadow: rgba(0,0,0,.5);
+    --blob1: #0ea5e9;
+    --blob2: #6366f1;
+    --blob3: #be185d;
+    --accent: #7cc4ff;
+    --ok: #4ade80;
+    --warn: #fdba74;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #090d18;
+  --fg: #edf0fa;
+  --muted: #9aa4c2;
+  --glass: rgba(255,255,255,.07);
+  --glass-strong: rgba(255,255,255,.14);
+  --line: rgba(255,255,255,.13);
+  --shine: rgba(255,255,255,.22);
+  --shadow: rgba(0,0,0,.5);
+  --blob1: #0ea5e9;
+  --blob2: #6366f1;
+  --blob3: #be185d;
+  --accent: #7cc4ff;
+  --ok: #4ade80;
+  --warn: #fdba74;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 120px;
+  min-height: 100vh;
+}
+.bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55; }
+.b1 { width: 340px; height: 340px; background: var(--blob1); top: -90px; left: -80px; animation: drift1 22s ease-in-out infinite alternate; }
+.b2 { width: 380px; height: 380px; background: var(--blob2); top: 30%; right: -140px; animation: drift2 26s ease-in-out infinite alternate; }
+.b3 { width: 300px; height: 300px; background: var(--blob3); bottom: -90px; left: 12%; opacity: .4; animation: drift1 30s ease-in-out infinite alternate-reverse; }
+@keyframes drift1 { to { transform: translate(50px, 40px) scale(1.08); } }
+@keyframes drift2 { to { transform: translate(-60px, -30px) scale(.94); } }
+
+.app { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.logo { width: 46px; height: 46px; flex: none; filter: drop-shadow(0 8px 16px var(--shadow)); }
+.brand small { display: block; color: var(--muted); font-size: 12px; letter-spacing: .04em; }
+
+.switch {
+  position: relative; display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+  width: 84px; height: 38px; padding: 3px; flex: none;
+  border-radius: 999px; border: 1px solid var(--line);
+  background: var(--glass); color: var(--fg);
+  backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: inset 0 1px 0 var(--shine), 0 6px 18px var(--shadow);
+  cursor: pointer; font: 600 12px var(--font-body); letter-spacing: .06em;
+}
+.switch span { position: relative; z-index: 1; text-align: center; transition: color .25s; }
+.switch .knob {
+  position: absolute; z-index: 0; top: 3px; left: 3px; width: calc(50% - 3px); height: calc(100% - 6px);
+  border-radius: 999px; background: linear-gradient(135deg, var(--btn1), var(--btn2));
+  box-shadow: 0 4px 12px rgba(37,99,235,.4); transition: transform .3s cubic-bezier(.3,1.3,.5,1);
+}
+.switch[aria-checked="true"] .knob { transform: translateX(100%); }
+.switch .l-id { color: #fff; }
+.switch .l-en { color: var(--muted); }
+.switch[aria-checked="true"] .l-id { color: var(--muted); }
+.switch[aria-checked="true"] .l-en { color: #fff; }
+
+h1 { font: 800 clamp(2rem, 8.5vw, 2.6rem)/1.05 var(--font-display); letter-spacing: -.03em; margin: 0; text-wrap: balance; }
+h2 { font: 700 1.3rem/1.2 var(--font-display); letter-spacing: -.02em; margin: 0 0 8px; text-wrap: balance; }
+p { margin: 0; }
+.tag { color: var(--muted); margin-top: 8px; max-width: 34ch; }
+
+.card {
+  position: relative; padding: 24px; border-radius: 28px; border: 1px solid var(--line);
+  background: var(--glass);
+  backdrop-filter: blur(26px) saturate(170%); -webkit-backdrop-filter: blur(26px) saturate(170%);
+  box-shadow: inset 0 1px 0 var(--shine), 0 24px 50px -20px var(--shadow);
+}
+.panel[hidden] { display: none; }
+.panel > .card { display: flex; flex-direction: column; gap: 16px; animation: rise .45s ease both; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.lead { color: var(--muted); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-align: center;
+  min-height: 52px; padding: 0 22px; border-radius: 18px; border: 0; cursor: pointer;
+  font: 600 15px var(--font-body); color: #fff; text-decoration: none;
+  background: linear-gradient(135deg, var(--btn1), var(--btn2));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 14px 28px -10px rgba(79,70,229,.6);
+  transition: transform .15s, filter .2s;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn:active { transform: scale(.98); }
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn.ghost { background: var(--glass); color: var(--fg); border: 1px solid var(--line); box-shadow: inset 0 1px 0 var(--shine); }
+.btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; filter: none; }
+.btn.big { min-height: 60px; font-size: 16px; }
+
+.notice {
+  display: flex; flex-direction: column; gap: 12px; padding: 18px; border-radius: 20px;
+  border: 1px solid var(--line); background: var(--glass-strong);
+}
+.notice[hidden] { display: none; }
+.notice strong { font-family: var(--font-display); font-weight: 700; }
+.notice.pulse { animation: rise .4s ease both, glow 1.6s ease .4s 2; }
+@keyframes glow { 50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent); } }
+
+.tip {
+  display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; border-radius: 18px;
+  font-size: 13.5px; line-height: 1.5; min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent);
+  background: color-mix(in srgb, var(--warn) 11%, transparent);
+}
+.tip svg { width: 20px; height: 20px; flex: none; color: var(--warn); margin-top: 1px; }
+.tip p { min-width: 0; }
+.tip b { font-weight: 600; }
+.drop {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center;
+  min-height: 150px; padding: 20px; border-radius: 22px; cursor: pointer;
+  border: 1.5px dashed color-mix(in srgb, var(--fg) 28%, transparent);
+  background: color-mix(in srgb, var(--glass) 70%, transparent);
+  transition: border-color .2s, background .2s;
+}
+.drop:hover, .drop:focus-within { border-color: var(--accent); }
+.drop svg { width: 30px; height: 30px; color: var(--accent); }
+.drop b { font-weight: 600; }
+.drop small { color: var(--muted); }
+.drop input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.drop:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.preview { display: flex; align-items: center; gap: 14px; padding: 10px; border-radius: 20px; border: 1px solid var(--line); background: var(--glass-strong); min-width: 0; }
+.preview[hidden] { display: none; }
+.preview img { width: 76px; height: 76px; object-fit: cover; border-radius: 14px; flex: none; }
+.preview .meta { min-width: 0; flex: 1; }
+.preview .name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.preview button { background: none; border: 0; color: var(--accent); font: 600 13px var(--font-body); cursor: pointer; padding: 4px 0; }
+.hint { font-size: 13px; color: var(--muted); }
+.err { color: var(--warn); font-size: 13px; min-height: 1.2em; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; user-select: all; }
+
+.status { text-align: center; font-weight: 500; color: var(--muted); }
+.ok-ico { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--ok) 20%, transparent); color: var(--ok); }
+.ok-ico svg { width: 28px; height: 28px; }
+
+nav.tabs-wrap {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  padding: 0 max(16px, env(safe-area-inset-left, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  pointer-events: none;
+}
+.tabs {
+  pointer-events: auto; max-width: 520px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 6px;
+  border-radius: 28px; border: 1px solid var(--line); background: var(--glass);
+  backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: inset 0 1px 0 var(--shine), 0 18px 40px -8px var(--shadow);
+}
+.tab {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 0;
+  padding: 9px 4px 8px; border: 0; border-radius: 22px; background: transparent; color: var(--muted);
+  font: 600 11.5px var(--font-body); cursor: pointer; transition: background .25s, color .25s;
+}
+.tab svg { width: 22px; height: 22px; }
+.tab[aria-current="page"] { background: var(--glass-strong); color: var(--fg); box-shadow: inset 0 1px 0 var(--shine), 0 4px 14px var(--shadow); }
+.tab[aria-current="page"] svg { color: var(--accent); }
+.tab .badge { position: absolute; top: 6px; right: calc(50% - 26px); width: 16px; height: 16px; border-radius: 50%; display: none; place-items: center; background: var(--glass-strong); border: 1px solid var(--line); }
+.tab .badge svg { width: 10px; height: 10px; }
+.tab[data-state="done"] .badge { display: grid; color: var(--ok); }
+.tab[data-state="locked"] .badge { display: grid; color: var(--muted); }
+.tab[data-state="done"] .b-lock, .tab[data-state="locked"] .b-check { display: none; }
+.tab span.label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+
+footer { display: flex; justify-content: center; }
+.reset { background: none; border: 0; color: var(--muted); font: 500 12px var(--font-body); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .blob, .panel > .card, .notice.pulse { animation: none; }
+  .switch .knob, .btn, .tab { transition: none; }
+}
+@media (max-width: 380px) { .card { padding: 20px; } .tab { font-size: 10.5px; } }
+</style>
+
+<div class="bg" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<div class="app">
+  <header>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--btn1)"/><stop offset="1" style="stop-color:var(--btn2)"/></linearGradient>
+          <linearGradient id="lg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        </defs>
+        <rect x="2" y="2" width="60" height="60" rx="18" fill="url(#lg1)"/>
+        <rect x="2" y="2" width="60" height="30" rx="18" fill="url(#lg2)"/>
+        <path d="M21 21 L43 43 M43 21 L21 43" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <rect x="2.5" y="2.5" width="59" height="59" rx="17.5" fill="none" stroke="#fff" stroke-opacity=".4"/>
+      </svg>
+      <div>
+        <small data-i18n="by">by masshieb</small>
+      </div>
+    </div>
+    <button class="switch" id="lang" role="switch" aria-checked="false" data-aria="langLabel" type="button">
+      <i class="knob"></i><span class="l-id">ID</span><span class="l-en">EN</span>
+    </button>
+  </header>
+
+  <div>
+    <h1>Xos17 Mod Launcher Premium</h1>
+    <p class="tag" data-i18n="tagline"></p>
+  </div>
+
+  <main>
+    <section class="panel" id="p1">
+      <div class="card">
+        <div>
+          <h2 data-i18n="s1Title"></h2>
+          <p class="lead" data-i18n="s1Text"></p>
+        </div>
+        <a class="btn big" id="donate" href="https://sociabuzz.com/masshieb_01/donate" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.2 5.2 0 0 0-7.4 0L12 7l-1.4-1.4a5.2 5.2 0 0 0-7.4 7.4L12 21.8l8.8-8.8a5.2 5.2 0 0 0 0-7.4z"/></svg>
+          <span data-i18n="donateBtn"></span>
+        </a>
+        <div class="tip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5h.01"/></svg>
+          <p><b data-i18n="tipLabel"></b> <span data-i18n="tipText"></span></p>
+        </div>
+        <div class="notice" id="confirm" hidden>
+          <div>
+            <strong data-i18n="confirmTitle"></strong>
+            <p class="lead" data-i18n="confirmText"></p>
+          </div>
+          <button class="btn" id="confirmBtn" type="button" data-i18n="confirmBtn"></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="p2" hidden>
+      <div class="card">
+        <div class="notice" id="lock2">
+          <div>
+            <strong data-i18n="lock2Title"></strong>
+            <p class="lead" data-i18n="lock2Text"></p>
+          </div>
+          <button class="btn ghost" type="button" data-go="1" data-i18n="goDonate"></button>
+        </div>
+        <div id="form2" hidden style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <h2 data-i18n="s2Title"></h2>
+            <p class="lead" data-i18n="s2Text"></p>
+          </div>
+          <label class="drop" id="drop" for="shot">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="9" cy="9" r="1.8"/><path d="M21 15l-5-5L5 21"/></svg>
+            <b data-i18n="pick"></b>
+            <small data-i18n="pickHint"></small>
+            <input type="file" id="shot" accept="image/*">
+          </label>
+          <div class="preview" id="preview" hidden>
+            <img id="thumb" alt="">
+            <div class="meta">
+              <div class="name" id="fname"></div>
+              <button type="button" id="change" data-i18n="change"></button>
+            </div>
+          </div>
+          <p class="err" id="err" role="alert"></p>
+          <button class="btn big" id="share" type="button" aria-disabled="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+            <span data-i18n="shareBtn"></span>
+          </button>
+          <a class="btn ghost" id="send" href="https://t.me/ms_hieb" target="_blank" rel="noopener noreferrer" aria-disabled="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            <span data-i18n="sendBtn"></span>
+          </a>
+          <p class="hint"><span data-i18n="sendNote"></span> <code>t.me/ms_hieb</code></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="p3" hidden>
+      <div class="card">
+        <div class="notice" id="lock3">
+          <div>
+            <strong data-i18n="lock3Title"></strong>
+            <p class="lead" data-i18n="lock3Text"></p>
+          </div>
+          <button class="btn ghost" type="button" data-go="2" data-i18n="goProof"></button>
+        </div>
+        <div id="ready3" hidden style="display:flex;flex-direction:column;gap:16px">
+          <div class="ok-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <div>
+            <h2 data-i18n="s3Title"></h2>
+            <p class="lead" data-i18n="s3Text"></p>
+          </div>
+          <p class="status" data-i18n="waitNote"></p>
+          <a class="btn big" id="dl" href="https://t.me/ms_hieb" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            <span data-i18n="tgBtn"></span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><button class="reset" id="reset" type="button" data-i18n="reset"></button></footer>
+</div>
+
+<nav class="tabs-wrap" aria-label="Menu">
+  <div class="tabs">
+    <button class="tab" type="button" data-tab="1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.2 5.2 0 0 0-7.4 0L12 7l-1.4-1.4a5.2 5.2 0 0 0-7.4 7.4L12 21.8l8.8-8.8a5.2 5.2 0 0 0 0-7.4z"/></svg>
+      <span class="label" data-i18n="navDonate"></span>
+      <i class="badge"><svg class="b-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><svg class="b-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></i>
+    </button>
+    <button class="tab" type="button" data-tab="2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>
+      <span class="label" data-i18n="navProof"></span>
+      <i class="badge"><svg class="b-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><svg class="b-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></i>
+    </button>
+    <button class="tab" type="button" data-tab="3">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+      <span class="label" data-i18n="navDownload"></span>
+      <i class="badge"><svg class="b-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><svg class="b-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></i>
+    </button>
+  </div>
+</nav>
+
+<script>
+(function () {
+  var T = {
+    id: {
+      by: "by: masshieb",
+      langLabel: "Ganti bahasa",
+      tagline: "Dukung pengembangnya, lalu unduh launcher-nya.",
+      navDonate: "Donasi", navProof: "Bukti Bayar", navDownload: "Download",
+      s1Title: "Donasi dulu",
+      s1Text: "Donasi lewat SociaBuzz. Setelah berhasil, lanjut ke halaman bukti pembayaran.",
+      donateBtn: "Donasi sekarang",
+      tipLabel: "Penting:",
+      tipText: "saat donasi, jangan lupa tulis nama kamu dan jangan centang pilihan anonim.",
+      confirmTitle: "Donasinya sudah berhasil?",
+      confirmText: "Kalau sudah, lanjut kirim screenshot bukti pembayaran.",
+      confirmBtn: "Ya, kirim bukti pembayaran",
+      s2Title: "Kirim bukti pembayaran",
+      s2Text: "Pilih screenshot donasimu, lalu kirim ke Telegram.",
+      pick: "Pilih screenshot", pickHint: "PNG atau JPG dari galeri",
+      change: "Ganti gambar",
+      shareBtn: "Bagikan screenshot ke Telegram",
+      sendBtn: "Kirim manual lewat chat Telegram",
+      sendNote: "Di menu bagikan, pilih Telegram lalu chat @ms_hieb. Kalau memakai tombol manual, lampirkan screenshot yang sama di chat. Link download dikirim setelah donasimu dicek.",
+      shareFail: "Menu bagikan tidak tersedia di browser ini. Pakai tombol manual di bawah, lalu lampirkan screenshot di chat.",
+      needFile: "Pilih screenshot dulu.",
+      wrongType: "Pilih file gambar (screenshot).",
+      lock2Title: "Selesaikan donasi dulu",
+      lock2Text: "Halaman ini terbuka setelah kamu berdonasi.",
+      goDonate: "Ke halaman donasi",
+      s3Title: "Bukti terkirim",
+      s3Text: "Terima kasih sudah mendukung. Link download dikirim lewat Telegram setelah donasimu dicek.",
+      waitNote: "Pastikan screenshot-nya sudah terkirim di chat Telegram.",
+      tgBtn: "Buka chat Telegram",
+      lock3Title: "Kirim bukti pembayaran dulu",
+      lock3Text: "Halaman ini terbuka setelah kamu mengirim bukti pembayaran.",
+      goProof: "Ke halaman bukti",
+      reset: "Mulai ulang"
+    },
+    en: {
+      by: "by: masshieb",
+      langLabel: "Switch language",
+      tagline: "Support the developer, then download the launcher.",
+      navDonate: "Donate", navProof: "Proof", navDownload: "Download",
+      s1Title: "Donate first",
+      s1Text: "Donate through SociaBuzz. Once it goes through, continue to the payment proof page.",
+      donateBtn: "Donate now",
+      tipLabel: "Important:",
+      tipText: "when you donate, remember to write your name and do not tick the anonymous option.",
+      confirmTitle: "Did your donation go through?",
+      confirmText: "If so, continue and send a screenshot as proof of payment.",
+      confirmBtn: "Yes, send payment proof",
+      s2Title: "Send payment proof",
+      s2Text: "Choose a screenshot of your donation, then send it on Telegram.",
+      pick: "Choose screenshot", pickHint: "PNG or JPG from your gallery",
+      change: "Change image",
+      shareBtn: "Share screenshot to Telegram",
+      sendBtn: "Send manually in the Telegram chat",
+      sendNote: "In the share menu, pick Telegram and then the chat with @ms_hieb. If you use the manual button, attach the same screenshot in the chat. The download link is sent once your donation is checked.",
+      shareFail: "The share menu is not available in this browser. Use the manual button below, then attach the screenshot in the chat.",
+      needFile: "Choose a screenshot first.",
+      wrongType: "Choose an image file (screenshot).",
+      lock2Title: "Finish your donation first",
+      lock2Text: "This page unlocks after you donate.",
+      goDonate: "Go to donation",
+      s3Title: "Proof sent",
+      s3Text: "Thanks for the support. The download link is sent on Telegram once your donation is checked.",
+      waitNote: "Make sure the screenshot has been sent in the Telegram chat.",
+      tgBtn: "Open Telegram chat",
+      lock3Title: "Send payment proof first",
+      lock3Text: "This page unlocks after you send your payment proof.",
+      goProof: "Go to proof page",
+      reset: "Start over"
+    }
+  };
+
+  var lang = "id", cur = 1, file = null, objUrl = null;
+  var s = { clicked: false, donated: false, proof: false };
+
+  try { var sv = localStorage.getItem("xos-lang"); if (sv === "en" || sv === "id") lang = sv; } catch (e) {}
+
+  function $(id) { return document.getElementById(id); }
+  function t(k, v) {
+    var str = (T[lang] && T[lang][k]) || k;
+    if (v) for (var x in v) str = str.replace("{" + x + "}", v[x]);
+    return str;
+  }
+
+  function applyLang() {
+    document.documentElement.lang = lang;
+    var els = document.querySelectorAll("[data-i18n]");
+    for (var i = 0; i < els.length; i++) els[i].textContent = t(els[i].getAttribute("data-i18n"));
+    var sw = $("lang");
+    sw.setAttribute("aria-checked", lang === "en" ? "true" : "false");
+    sw.setAttribute("aria-label", t("langLabel"));
+  }
+
+  function render() {
+    var tabs = document.querySelectorAll(".tab");
+    for (var i = 0; i < tabs.length; i++) {
+      var n = +tabs[i].getAttribute("data-tab"), st;
+      if (n === 1) st = s.donated ? "done" : "open";
+      else if (n === 2) st = s.proof ? "done" : (s.donated ? "open" : "locked");
+      else st = s.proof ? "open" : "locked";
+      tabs[i].setAttribute("data-state", st);
+      if (n === cur) tabs[i].setAttribute("aria-current", "page"); else tabs[i].removeAttribute("aria-current");
+    }
+    for (var p = 1; p <= 3; p++) $("p" + p).hidden = p !== cur;
+    $("confirm").hidden = !(s.clicked && !s.donated);
+    $("lock2").hidden = s.donated;
+    $("form2").hidden = !s.donated;
+    $("lock3").hidden = s.proof;
+    $("ready3").hidden = !s.proof;
+    $("send").setAttribute("aria-disabled", file ? "false" : "true");
+    $("share").setAttribute("aria-disabled", file ? "false" : "true");
+    $("preview").hidden = !file;
+    $("drop").hidden = !!file;
+  }
+
+  function go(n) {
+    cur = n;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function setFile(f) {
+    var err = $("err");
+    err.textContent = "";
+    if (!f) return;
+    if (!/^image\//.test(f.type)) { err.textContent = t("wrongType"); return; }
+    file = f;
+    if (objUrl) URL.revokeObjectURL(objUrl);
+    objUrl = URL.createObjectURL(f);
+    $("thumb").src = objUrl;
+    $("fname").textContent = f.name;
+    render();
+  }
+
+  // events
+  $("lang").addEventListener("click", function () {
+    lang = lang === "id" ? "en" : "id";
+    try { localStorage.setItem("xos-lang", lang); } catch (e) {}
+    applyLang();
+    if (!file) $("err").textContent = "";
+  });
+
+  var tabBtns = document.querySelectorAll(".tab");
+  for (var i = 0; i < tabBtns.length; i++) tabBtns[i].addEventListener("click", function () { go(+this.getAttribute("data-tab")); });
+  var goBtns = document.querySelectorAll("[data-go]");
+  for (var j = 0; j < goBtns.length; j++) goBtns[j].addEventListener("click", function () { go(+this.getAttribute("data-go")); });
+
+  $("donate").addEventListener("click", function () {
+    setTimeout(function () {
+      s.clicked = true; render();
+      var c = $("confirm"); c.classList.remove("pulse"); void c.offsetWidth; c.classList.add("pulse");
+      c.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 600);
+  });
+  $("confirmBtn").addEventListener("click", function () { s.donated = true; go(2); });
+
+  $("shot").addEventListener("change", function () { setFile(this.files && this.files[0]); });
+  $("change").addEventListener("click", function () {
+    file = null; $("shot").value = ""; render(); $("shot").click();
+  });
+
+  $("share").addEventListener("click", function () {
+    var err = $("err");
+    err.textContent = "";
+    if (!file) { err.textContent = t("needFile"); return; }
+    var ok = false;
+    try { ok = !!(navigator.share && navigator.canShare && navigator.canShare({ files: [file] })); } catch (e) {}
+    if (!ok) { err.textContent = t("shareFail"); return; }
+    navigator.share({ files: [file], title: "Bukti donasi Xos17 Mod Launcher Premium", text: "Bukti donasi Xos17 Mod Launcher Premium" })
+      .then(function () { s.proof = true; go(3); })
+      .catch(function (e) {
+        if (e && e.name === "AbortError") return;
+        err.textContent = t("shareFail");
+      });
+  });
+
+  $("send").addEventListener("click", function (e) {
+    if (!file) { e.preventDefault(); $("err").textContent = t("needFile"); return; }
+    setTimeout(function () { s.proof = true; go(3); }, 700);
+  });
+
+  $("reset").addEventListener("click", function () {
+    s = { clicked: false, donated: false, proof: false };
+    file = null; $("shot").value = ""; $("err").textContent = "";
+    go(1);
+  });
+
+  applyLang();
+  render();
+})();
+</script>
+
+</body></html>
